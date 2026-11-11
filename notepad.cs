@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -7,8 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Reflection;
@@ -306,7 +303,7 @@ public class FormMain : Form
 		// É^ÉuÇÃïùÇïœçXÇ∑ÇÈ
 		int tabSize = 4;
 		int tabWidth = (int)(tabSize * 3 * 96 / 72);
-		Win32.SendMessage(this.TBxMain.Handle, 0x00CB, 1, new int[]{tabWidth, });
+		Win32.SendMessage(this.TBxMain.Handle, Win32.EM_SETTABSTOPS, 1, new int[]{tabWidth, });
 
 		this.Load += this.FormMain_Load;
 		this.FormClosing += this.FormMain_FormClosing;
@@ -576,7 +573,7 @@ public class FormMain : Form
 			case Keys.Right:
 			case Keys.Shift:
 			case Keys.Up:
-				(new Thread(new ThreadStart(this.ShowCursorPos))).Start();
+				this.ShowCursorPos();
 				break;
 		}
 	}
@@ -932,8 +929,9 @@ public class TextBoxEx : TextBox
 
 public static class Win32
 {
-	public const int EM_LINEFROMCHAR = 0x00C9;
 	public const int EM_LINEINDEX = 0x00BB;
+	public const int EM_LINEFROMCHAR = 0x00C9;
+	public const int EM_SETTABSTOPS = 0x00CB;
 
 	[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
 	public static extern bool IsDBCSLeadByte(byte TestChar);
